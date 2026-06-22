@@ -1,1 +1,5370 @@
 
+openapi: 3.0.3
+info:
+  title: Cognitive Knowledge OS API
+  version: 0.1.0
+  description: Governed ontology-driven hybrid RAG + agent platform.
+paths:
+  /api/v1/agents/agents/:
+    get:
+      operationId: v1_agents_agents_list
+      parameters:
+      - in: query
+        name: enabled
+        schema:
+          type: boolean
+      - in: query
+        name: model
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAgentDefinitionList'
+          description: ''
+    post:
+      operationId: v1_agents_agents_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentDefinition'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AgentDefinition'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AgentDefinition'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDefinition'
+          description: ''
+  /api/v1/agents/agents/{id}/:
+    get:
+      operationId: v1_agents_agents_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this agent definition.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDefinition'
+          description: ''
+    put:
+      operationId: v1_agents_agents_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this agent definition.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentDefinition'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AgentDefinition'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AgentDefinition'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDefinition'
+          description: ''
+    patch:
+      operationId: v1_agents_agents_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this agent definition.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAgentDefinition'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAgentDefinition'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAgentDefinition'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDefinition'
+          description: ''
+    delete:
+      operationId: v1_agents_agents_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this agent definition.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/agents/agents/{id}/mcp_tools/:
+    get:
+      operationId: v1_agents_agents_mcp_tools_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this agent definition.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDefinition'
+          description: ''
+  /api/v1/agents/agents/{id}/trigger/:
+    post:
+      operationId: v1_agents_agents_trigger_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this agent definition.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentDefinition'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AgentDefinition'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AgentDefinition'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDefinition'
+          description: ''
+  /api/v1/agents/agents/tools/:
+    get:
+      operationId: v1_agents_agents_tools_retrieve
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDefinition'
+          description: ''
+  /api/v1/agents/runs/:
+    get:
+      operationId: v1_agents_runs_list
+      parameters:
+      - in: query
+        name: agent
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - failed
+          - pending
+          - running
+          - succeeded
+        description: |-
+          * `pending` - Pending
+          * `running` - Running
+          * `succeeded` - Succeeded
+          * `failed` - Failed
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAgentRunList'
+          description: ''
+  /api/v1/agents/runs/{id}/:
+    get:
+      operationId: v1_agents_runs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this agent run.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRun'
+          description: ''
+  /api/v1/agents/traces/:
+    get:
+      operationId: v1_agents_traces_list
+      parameters:
+      - in: query
+        name: kind
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: run
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAgentTraceList'
+          description: ''
+  /api/v1/agents/traces/{id}/:
+    get:
+      operationId: v1_agents_traces_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this agent trace.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentTrace'
+          description: ''
+  /api/v1/catalog/datasets/:
+    get:
+      operationId: v1_catalog_datasets_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: source
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDatasetList'
+          description: ''
+    post:
+      operationId: v1_catalog_datasets_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dataset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Dataset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Dataset'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+          description: ''
+  /api/v1/catalog/datasets/{id}/:
+    get:
+      operationId: v1_catalog_datasets_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this dataset.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+          description: ''
+    put:
+      operationId: v1_catalog_datasets_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this dataset.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dataset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Dataset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Dataset'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+          description: ''
+    patch:
+      operationId: v1_catalog_datasets_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this dataset.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDataset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDataset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDataset'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+          description: ''
+    delete:
+      operationId: v1_catalog_datasets_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this dataset.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/catalog/runs/:
+    get:
+      operationId: v1_catalog_runs_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: source
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - cancelled
+          - failed
+          - pending
+          - running
+          - succeeded
+        description: |-
+          * `pending` - Pending
+          * `running` - Running
+          * `succeeded` - Succeeded
+          * `failed` - Failed
+          * `cancelled` - Cancelled
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedIngestionRunList'
+          description: ''
+  /api/v1/catalog/runs/{id}/:
+    get:
+      operationId: v1_catalog_runs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ingestion run.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionRun'
+          description: ''
+  /api/v1/catalog/sources/:
+    get:
+      operationId: v1_catalog_sources_list
+      parameters:
+      - in: query
+        name: connector_key
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - active
+          - error
+          - paused
+        description: |-
+          * `active` - Active
+          * `paused` - Paused
+          * `error` - Error
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDataSourceList'
+          description: ''
+    post:
+      operationId: v1_catalog_sources_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataSource'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DataSource'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DataSource'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+          description: ''
+  /api/v1/catalog/sources/{id}/:
+    get:
+      operationId: v1_catalog_sources_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this data source.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+          description: ''
+    put:
+      operationId: v1_catalog_sources_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this data source.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataSource'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DataSource'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DataSource'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+          description: ''
+    patch:
+      operationId: v1_catalog_sources_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this data source.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDataSource'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDataSource'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDataSource'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+          description: ''
+    delete:
+      operationId: v1_catalog_sources_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this data source.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/catalog/sources/{id}/validate/:
+    post:
+      operationId: v1_catalog_sources_validate_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this data source.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataSource'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DataSource'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DataSource'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+          description: ''
+  /api/v1/catalog/sources/connectors/:
+    get:
+      operationId: v1_catalog_sources_connectors_retrieve
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+          description: ''
+  /api/v1/evals/datasets/:
+    get:
+      operationId: v1_evals_datasets_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEvalDatasetList'
+          description: ''
+    post:
+      operationId: v1_evals_datasets_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvalDataset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EvalDataset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EvalDataset'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalDataset'
+          description: ''
+  /api/v1/evals/datasets/{id}/:
+    get:
+      operationId: v1_evals_datasets_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this eval dataset.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalDataset'
+          description: ''
+    put:
+      operationId: v1_evals_datasets_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this eval dataset.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvalDataset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EvalDataset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EvalDataset'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalDataset'
+          description: ''
+    patch:
+      operationId: v1_evals_datasets_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this eval dataset.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEvalDataset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEvalDataset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEvalDataset'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalDataset'
+          description: ''
+    delete:
+      operationId: v1_evals_datasets_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this eval dataset.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/evals/metrics/:
+    get:
+      operationId: v1_evals_metrics_list
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: run
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMetricList'
+          description: ''
+  /api/v1/evals/metrics/{id}/:
+    get:
+      operationId: v1_evals_metrics_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this metric.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metric'
+          description: ''
+  /api/v1/evals/runs/:
+    get:
+      operationId: v1_evals_runs_list
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: target_id
+        schema:
+          type: string
+      - in: query
+        name: target_kind
+        schema:
+          type: string
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEvalRunList'
+          description: ''
+    post:
+      operationId: v1_evals_runs_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvalRun'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EvalRun'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EvalRun'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRun'
+          description: ''
+  /api/v1/evals/runs/{id}/:
+    get:
+      operationId: v1_evals_runs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this eval run.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRun'
+          description: ''
+    put:
+      operationId: v1_evals_runs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this eval run.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvalRun'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EvalRun'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EvalRun'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRun'
+          description: ''
+    patch:
+      operationId: v1_evals_runs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this eval run.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEvalRun'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEvalRun'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEvalRun'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRun'
+          description: ''
+    delete:
+      operationId: v1_evals_runs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this eval run.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/evals/runs/dashboard/:
+    get:
+      operationId: v1_evals_runs_dashboard_retrieve
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRun'
+          description: ''
+  /api/v1/evals/runs/diff/:
+    get:
+      operationId: v1_evals_runs_diff_retrieve
+      description: 'Regression delta: ?baseline=<id>&candidate=<id>&threshold=0.02'
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRun'
+          description: ''
+  /api/v1/evals/runs/trigger/:
+    post:
+      operationId: v1_evals_runs_trigger_create
+      description: Create a run and dispatch the eval task.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvalRun'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EvalRun'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EvalRun'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRun'
+          description: ''
+  /api/v1/governance/audit/:
+    get:
+      operationId: v1_governance_audit_list
+      description: Governance is append-only via services; the API is read-only.
+      parameters:
+      - in: query
+        name: action
+        schema:
+          type: string
+      - in: query
+        name: actor_id
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: resource_kind
+        schema:
+          type: string
+      - in: query
+        name: workspace_id
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuditEventList'
+          description: ''
+  /api/v1/governance/audit/{id}/:
+    get:
+      operationId: v1_governance_audit_retrieve
+      description: Governance is append-only via services; the API is read-only.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this audit event.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditEvent'
+          description: ''
+  /api/v1/governance/confidence/:
+    get:
+      operationId: v1_governance_confidence_list
+      description: Governance is append-only via services; the API is read-only.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: target_id
+        schema:
+          type: string
+      - in: query
+        name: target_kind
+        schema:
+          type: string
+      - in: query
+        name: workspace_id
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConfidenceScoreList'
+          description: ''
+  /api/v1/governance/confidence/{id}/:
+    get:
+      operationId: v1_governance_confidence_retrieve
+      description: Governance is append-only via services; the API is read-only.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this confidence score.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfidenceScore'
+          description: ''
+  /api/v1/governance/cost/:
+    get:
+      operationId: v1_governance_cost_list
+      description: Governance is append-only via services; the API is read-only.
+      parameters:
+      - in: query
+        name: model
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: provider
+        schema:
+          type: string
+      - in: query
+        name: run_id
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: workspace_id
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCostEventList'
+          description: ''
+  /api/v1/governance/cost/{id}/:
+    get:
+      operationId: v1_governance_cost_retrieve
+      description: Governance is append-only via services; the API is read-only.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this cost event.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostEvent'
+          description: ''
+  /api/v1/governance/lineage/:
+    get:
+      operationId: v1_governance_lineage_list
+      description: Governance is append-only via services; the API is read-only.
+      parameters:
+      - in: query
+        name: dst_id
+        schema:
+          type: string
+      - in: query
+        name: dst_kind
+        schema:
+          type: string
+      - in: query
+        name: op
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: run_id
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: src_id
+        schema:
+          type: string
+      - in: query
+        name: src_kind
+        schema:
+          type: string
+      - in: query
+        name: workspace_id
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLineageEdgeList'
+          description: ''
+  /api/v1/governance/lineage/{id}/:
+    get:
+      operationId: v1_governance_lineage_retrieve
+      description: Governance is append-only via services; the API is read-only.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this lineage edge.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineageEdge'
+          description: ''
+  /api/v1/ontology/entities/:
+    get:
+      operationId: v1_ontology_entities_list
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: version
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEntityTypeList'
+          description: ''
+    post:
+      operationId: v1_ontology_entities_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityType'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EntityType'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EntityType'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityType'
+          description: ''
+  /api/v1/ontology/entities/{id}/:
+    get:
+      operationId: v1_ontology_entities_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this entity type.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityType'
+          description: ''
+    put:
+      operationId: v1_ontology_entities_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this entity type.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityType'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EntityType'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EntityType'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityType'
+          description: ''
+    patch:
+      operationId: v1_ontology_entities_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this entity type.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEntityType'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEntityType'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEntityType'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityType'
+          description: ''
+    delete:
+      operationId: v1_ontology_entities_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this entity type.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/ontology/relations/:
+    get:
+      operationId: v1_ontology_relations_list
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: source_type
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: target_type
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: version
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRelationTypeList'
+          description: ''
+    post:
+      operationId: v1_ontology_relations_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelationType'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RelationType'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RelationType'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelationType'
+          description: ''
+  /api/v1/ontology/relations/{id}/:
+    get:
+      operationId: v1_ontology_relations_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this relation type.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelationType'
+          description: ''
+    put:
+      operationId: v1_ontology_relations_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this relation type.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelationType'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RelationType'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RelationType'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelationType'
+          description: ''
+    patch:
+      operationId: v1_ontology_relations_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this relation type.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRelationType'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRelationType'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRelationType'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelationType'
+          description: ''
+    delete:
+      operationId: v1_ontology_relations_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this relation type.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/ontology/taxonomies/:
+    get:
+      operationId: v1_ontology_taxonomies_list
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: version
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTaxonomyList'
+          description: ''
+    post:
+      operationId: v1_ontology_taxonomies_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Taxonomy'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Taxonomy'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Taxonomy'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Taxonomy'
+          description: ''
+  /api/v1/ontology/taxonomies/{id}/:
+    get:
+      operationId: v1_ontology_taxonomies_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this taxonomy.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Taxonomy'
+          description: ''
+    put:
+      operationId: v1_ontology_taxonomies_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this taxonomy.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Taxonomy'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Taxonomy'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Taxonomy'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Taxonomy'
+          description: ''
+    patch:
+      operationId: v1_ontology_taxonomies_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this taxonomy.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTaxonomy'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTaxonomy'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTaxonomy'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Taxonomy'
+          description: ''
+    delete:
+      operationId: v1_ontology_taxonomies_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this taxonomy.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/ontology/versions/:
+    get:
+      operationId: v1_ontology_versions_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: semver
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - archived
+          - draft
+          - published
+        description: |-
+          * `draft` - Draft
+          * `published` - Published
+          * `archived` - Archived
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOntologyVersionList'
+          description: ''
+    post:
+      operationId: v1_ontology_versions_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OntologyVersion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OntologyVersion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OntologyVersion'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OntologyVersion'
+          description: ''
+  /api/v1/ontology/versions/{id}/:
+    get:
+      operationId: v1_ontology_versions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ontology version.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OntologyVersion'
+          description: ''
+    put:
+      operationId: v1_ontology_versions_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ontology version.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OntologyVersion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OntologyVersion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OntologyVersion'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OntologyVersion'
+          description: ''
+    patch:
+      operationId: v1_ontology_versions_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ontology version.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOntologyVersion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOntologyVersion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOntologyVersion'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OntologyVersion'
+          description: ''
+    delete:
+      operationId: v1_ontology_versions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ontology version.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/ontology/versions/{id}/diff/:
+    get:
+      operationId: v1_ontology_versions_diff_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ontology version.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OntologyVersion'
+          description: ''
+  /api/v1/ontology/versions/{id}/publish/:
+    post:
+      operationId: v1_ontology_versions_publish_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ontology version.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OntologyVersion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OntologyVersion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OntologyVersion'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OntologyVersion'
+          description: ''
+  /api/v1/ontology/versions/{id}/rollback/:
+    post:
+      operationId: v1_ontology_versions_rollback_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ontology version.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OntologyVersion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OntologyVersion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OntologyVersion'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OntologyVersion'
+          description: ''
+  /api/v1/ontology/versions/{id}/schema-summary/:
+    get:
+      operationId: v1_ontology_versions_schema_summary_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ontology version.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OntologyVersion'
+          description: ''
+  /api/v1/packs/installs/:
+    get:
+      operationId: v1_packs_installs_list
+      parameters:
+      - in: query
+        name: pack
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: workspace_id
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPackInstallList'
+          description: ''
+  /api/v1/packs/installs/{id}/:
+    get:
+      operationId: v1_packs_installs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pack install.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackInstall'
+          description: ''
+  /api/v1/packs/packs/:
+    get:
+      operationId: v1_packs_packs_list
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: publisher
+        schema:
+          type: string
+      - in: query
+        name: semver
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPackList'
+          description: ''
+    post:
+      operationId: v1_packs_packs_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pack'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pack'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pack'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pack'
+          description: ''
+  /api/v1/packs/packs/{id}/:
+    get:
+      operationId: v1_packs_packs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pack.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pack'
+          description: ''
+    put:
+      operationId: v1_packs_packs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pack.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pack'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pack'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pack'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pack'
+          description: ''
+    patch:
+      operationId: v1_packs_packs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pack.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPack'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPack'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPack'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pack'
+          description: ''
+    delete:
+      operationId: v1_packs_packs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pack.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/packs/packs/{id}/install/:
+    post:
+      operationId: v1_packs_packs_install_create
+      description: Install this pack into a target workspace.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pack.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pack'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pack'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pack'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pack'
+          description: ''
+  /api/v1/packs/packs/{id}/verify/:
+    get:
+      operationId: v1_packs_packs_verify_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pack.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pack'
+          description: ''
+  /api/v1/packs/packs/build/:
+    post:
+      operationId: v1_packs_packs_build_create
+      description: |-
+        Snapshot a workspace into a new pack version.
+
+        POST body::
+
+            {"workspace_id": "...", "name": "finance-baseline",
+             "semver": "1.0.0", "publisher": "acme",
+             "description": "...", "include": ["ontology", "agents"]}
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pack'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pack'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pack'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pack'
+          description: ''
+  /api/v1/packs/packs/versions/:
+    get:
+      operationId: v1_packs_packs_versions_retrieve
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pack'
+          description: ''
+  /api/v1/pipelines/chunks/:
+    get:
+      operationId: v1_pipelines_chunks_list
+      parameters:
+      - in: query
+        name: document
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedChunkList'
+          description: ''
+  /api/v1/pipelines/chunks/{id}/:
+    get:
+      operationId: v1_pipelines_chunks_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this chunk.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chunk'
+          description: ''
+  /api/v1/pipelines/documents/:
+    get:
+      operationId: v1_pipelines_documents_list
+      parameters:
+      - in: query
+        name: mime_type
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDocumentList'
+          description: ''
+  /api/v1/pipelines/documents/{id}/:
+    get:
+      operationId: v1_pipelines_documents_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+  /api/v1/pipelines/pipelines/:
+    get:
+      operationId: v1_pipelines_pipelines_list
+      parameters:
+      - in: query
+        name: enabled
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPipelineList'
+          description: ''
+    post:
+      operationId: v1_pipelines_pipelines_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pipeline'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pipeline'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pipeline'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+          description: ''
+  /api/v1/pipelines/pipelines/{id}/:
+    get:
+      operationId: v1_pipelines_pipelines_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pipeline.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+          description: ''
+    put:
+      operationId: v1_pipelines_pipelines_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pipeline.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pipeline'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pipeline'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pipeline'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+          description: ''
+    patch:
+      operationId: v1_pipelines_pipelines_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pipeline.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPipeline'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPipeline'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPipeline'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+          description: ''
+    delete:
+      operationId: v1_pipelines_pipelines_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pipeline.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/pipelines/pipelines/{id}/trigger/:
+    post:
+      operationId: v1_pipelines_pipelines_trigger_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pipeline.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pipeline'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pipeline'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pipeline'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+          description: ''
+  /api/v1/pipelines/pipelines/processors/:
+    get:
+      operationId: v1_pipelines_pipelines_processors_retrieve
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+          description: ''
+  /api/v1/pipelines/runs/:
+    get:
+      operationId: v1_pipelines_runs_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: pipeline
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - cancelled
+          - failed
+          - pending
+          - running
+          - succeeded
+        description: |-
+          * `pending` - Pending
+          * `running` - Running
+          * `succeeded` - Succeeded
+          * `failed` - Failed
+          * `cancelled` - Cancelled
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPipelineRunList'
+          description: ''
+  /api/v1/pipelines/runs/{id}/:
+    get:
+      operationId: v1_pipelines_runs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this pipeline run.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineRun'
+          description: ''
+  /api/v1/pipelines/steps/:
+    get:
+      operationId: v1_pipelines_steps_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: processor_key
+        schema:
+          type: string
+      - in: query
+        name: run
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: status
+        schema:
+          type: string
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedStepRunList'
+          description: ''
+  /api/v1/pipelines/steps/{id}/:
+    get:
+      operationId: v1_pipelines_steps_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this step run.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StepRun'
+          description: ''
+  /api/v1/retrieval/profiles/:
+    get:
+      operationId: v1_retrieval_profiles_list
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: workspace
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRetrievalProfileList'
+          description: ''
+    post:
+      operationId: v1_retrieval_profiles_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrievalProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RetrievalProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RetrievalProfile'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievalProfile'
+          description: ''
+  /api/v1/retrieval/profiles/{id}/:
+    get:
+      operationId: v1_retrieval_profiles_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this retrieval profile.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievalProfile'
+          description: ''
+    put:
+      operationId: v1_retrieval_profiles_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this retrieval profile.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrievalProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RetrievalProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RetrievalProfile'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievalProfile'
+          description: ''
+    patch:
+      operationId: v1_retrieval_profiles_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this retrieval profile.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRetrievalProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRetrievalProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRetrievalProfile'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievalProfile'
+          description: ''
+    delete:
+      operationId: v1_retrieval_profiles_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this retrieval profile.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/retrieval/profiles/{id}/query/:
+    post:
+      operationId: v1_retrieval_profiles_query_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this retrieval profile.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrievalProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RetrievalProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RetrievalProfile'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievalProfile'
+          description: ''
+components:
+  schemas:
+    AgentDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        system_prompt:
+          type: string
+        tools: {}
+        mcp_sources: {}
+        model:
+          type: string
+          maxLength: 120
+        enabled:
+          type: boolean
+        workspace:
+          type: string
+          format: uuid
+        ontology_version:
+          type: string
+          format: uuid
+          nullable: true
+        retrieval_profile:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - created_at
+      - id
+      - name
+      - updated_at
+      - workspace
+    AgentRun:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/AgentRunStatusEnum'
+        input: {}
+        output: {}
+        triggered_by:
+          type: string
+          maxLength: 64
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        finished_at:
+          type: string
+          format: date-time
+          nullable: true
+        workspace:
+          type: string
+          format: uuid
+        agent:
+          type: string
+          format: uuid
+      required:
+      - agent
+      - created_at
+      - id
+      - updated_at
+      - workspace
+    AgentRunStatusEnum:
+      enum:
+      - pending
+      - running
+      - succeeded
+      - failed
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `running` - Running
+        * `succeeded` - Succeeded
+        * `failed` - Failed
+    AgentTrace:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        seq:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        kind:
+          type: string
+          maxLength: 32
+        payload: {}
+        workspace:
+          type: string
+          format: uuid
+        run:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - id
+      - kind
+      - run
+      - seq
+      - updated_at
+      - workspace
+    AuditEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        workspace_id:
+          type: string
+          format: uuid
+          nullable: true
+        actor_id:
+          type: string
+          maxLength: 64
+        action:
+          type: string
+          maxLength: 80
+        resource_kind:
+          type: string
+          maxLength: 64
+        resource_id:
+          type: string
+          maxLength: 128
+        method:
+          type: string
+          maxLength: 8
+        path:
+          type: string
+          maxLength: 512
+        status:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        ip:
+          type: string
+          nullable: true
+        metadata: {}
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - action
+      - created_at
+      - id
+    CardinalityEnum:
+      enum:
+      - 1-1
+      - 1-N
+      - N-N
+      type: string
+      description: |-
+        * `1-1` - One One
+        * `1-N` - One Many
+        * `N-N` - Many Many
+    Chunk:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        ordinal:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        text:
+          type: string
+        sha256:
+          type: string
+          maxLength: 64
+        metadata: {}
+        acl_hash:
+          type: string
+          maxLength: 64
+        workspace:
+          type: string
+          format: uuid
+        document:
+          type: string
+          format: uuid
+      required:
+      - acl_hash
+      - created_at
+      - document
+      - id
+      - ordinal
+      - sha256
+      - text
+      - updated_at
+      - workspace
+    ConfidenceScore:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        workspace_id:
+          type: string
+          format: uuid
+        target_kind:
+          type: string
+          maxLength: 32
+        target_id:
+          type: string
+          maxLength: 128
+        retrieval_confidence:
+          type: number
+          format: double
+        ontology_confidence:
+          type: number
+          format: double
+        source_trust:
+          type: number
+          format: double
+        reasoning_confidence:
+          type: number
+          format: double
+        composite:
+          type: number
+          format: double
+        explanation: {}
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - target_id
+      - target_kind
+      - workspace_id
+    CostEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        workspace_id:
+          type: string
+          format: uuid
+          nullable: true
+        run_id:
+          type: string
+          format: uuid
+          nullable: true
+        actor:
+          type: string
+          maxLength: 64
+        provider:
+          type: string
+          maxLength: 64
+        model:
+          type: string
+          maxLength: 128
+        input_tokens:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        output_tokens:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        cost_usd:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,6}(?:\.\d{0,6})?$
+        latency_ms:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        tags: {}
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - model
+      - provider
+    DataSource:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        connector_key:
+          type: string
+          maxLength: 80
+        config: {}
+        secret_ref:
+          type: string
+          maxLength: 200
+        status:
+          $ref: '#/components/schemas/DataSourceStatusEnum'
+        schedule:
+          type: string
+          maxLength: 80
+        workspace:
+          type: string
+          format: uuid
+      required:
+      - connector_key
+      - created_at
+      - id
+      - name
+      - updated_at
+      - workspace
+    DataSourceStatusEnum:
+      enum:
+      - active
+      - paused
+      - error
+      type: string
+      description: |-
+        * `active` - Active
+        * `paused` - Paused
+        * `error` - Error
+    Dataset:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        uri:
+          type: string
+          maxLength: 1024
+        metadata: {}
+        workspace:
+          type: string
+          format: uuid
+        source:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - id
+      - name
+      - source
+      - updated_at
+      - workspace
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        natural_key:
+          type: string
+          maxLength: 512
+        sha256:
+          type: string
+          maxLength: 64
+        mime_type:
+          type: string
+          maxLength: 120
+        uri:
+          type: string
+          maxLength: 1024
+        title:
+          type: string
+          maxLength: 512
+        metadata: {}
+        acl_hash:
+          type: string
+          maxLength: 64
+        workspace:
+          type: string
+          format: uuid
+      required:
+      - acl_hash
+      - created_at
+      - id
+      - mime_type
+      - natural_key
+      - sha256
+      - updated_at
+      - workspace
+    EntityType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        version:
+          type: string
+          format: uuid
+        workspace:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 128
+        parent:
+          type: string
+          format: uuid
+          nullable: true
+        properties: {}
+        constraints: {}
+        description:
+          type: string
+      required:
+      - id
+      - name
+      - version
+      - workspace
+    EvalDataset:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        items: {}
+        workspace:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - id
+      - name
+      - updated_at
+      - workspace
+    EvalRun:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Metric'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        target_kind:
+          type: string
+          maxLength: 32
+        target_id:
+          type: string
+          maxLength: 64
+        started_at:
+          type: string
+          format: date-time
+          readOnly: true
+        finished_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        summary:
+          readOnly: true
+        workspace:
+          type: string
+          format: uuid
+        dataset:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - dataset
+      - finished_at
+      - id
+      - metrics
+      - started_at
+      - summary
+      - target_id
+      - target_kind
+      - updated_at
+      - workspace
+    FreshnessEnum:
+      enum:
+      - indexed
+      - live
+      - hybrid
+      type: string
+      description: |-
+        * `indexed` - indexed
+        * `live` - live
+        * `hybrid` - hybrid
+    IngestionRun:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/Status6d9Enum'
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        finished_at:
+          type: string
+          format: date-time
+          nullable: true
+        items_total:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        items_ok:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        items_failed:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        error:
+          type: string
+        cursor: {}
+        workspace:
+          type: string
+          format: uuid
+        source:
+          type: string
+          format: uuid
+        pipeline:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - created_at
+      - id
+      - source
+      - updated_at
+      - workspace
+    LineageEdge:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        workspace_id:
+          type: string
+          format: uuid
+        src_kind:
+          type: string
+          maxLength: 32
+        src_id:
+          type: string
+          maxLength: 128
+        dst_kind:
+          type: string
+          maxLength: 32
+        dst_id:
+          type: string
+          maxLength: 128
+        op:
+          type: string
+          maxLength: 64
+        run_id:
+          type: string
+          format: uuid
+          nullable: true
+        metadata: {}
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - dst_id
+      - dst_kind
+      - id
+      - op
+      - src_id
+      - src_kind
+      - workspace_id
+    Metric:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 80
+        value:
+          type: number
+          format: double
+        metadata: {}
+        workspace:
+          type: string
+          format: uuid
+        run:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - id
+      - name
+      - run
+      - updated_at
+      - value
+      - workspace
+    OntologyVersion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        workspace:
+          type: string
+          format: uuid
+        semver:
+          type: string
+          maxLength: 32
+        status:
+          allOf:
+          - $ref: '#/components/schemas/OntologyVersionStatusEnum'
+          readOnly: true
+        parent:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        notes:
+          type: string
+        published_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - parent
+      - published_at
+      - semver
+      - status
+      - workspace
+    OntologyVersionStatusEnum:
+      enum:
+      - draft
+      - published
+      - archived
+      type: string
+      description: |-
+        * `draft` - Draft
+        * `published` - Published
+        * `archived` - Archived
+    Pack:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        semver:
+          type: string
+          maxLength: 32
+        publisher:
+          type: string
+          maxLength: 120
+        description:
+          type: string
+        manifest: {}
+        signature:
+          type: string
+          readOnly: true
+        signature_ok:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - semver
+      - signature
+      - signature_ok
+    PackInstall:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        workspace_id:
+          type: string
+          format: uuid
+        installed_at:
+          type: string
+          format: date-time
+          readOnly: true
+        notes:
+          type: string
+        applied:
+          readOnly: true
+        pack:
+          type: string
+          format: uuid
+      required:
+      - applied
+      - id
+      - installed_at
+      - pack
+      - workspace_id
+    PaginatedAgentDefinitionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentDefinition'
+    PaginatedAgentRunList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentRun'
+    PaginatedAgentTraceList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentTrace'
+    PaginatedAuditEventList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEvent'
+    PaginatedChunkList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chunk'
+    PaginatedConfidenceScoreList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfidenceScore'
+    PaginatedCostEventList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CostEvent'
+    PaginatedDataSourceList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataSource'
+    PaginatedDatasetList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dataset'
+    PaginatedDocumentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+    PaginatedEntityTypeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityType'
+    PaginatedEvalDatasetList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvalDataset'
+    PaginatedEvalRunList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvalRun'
+    PaginatedIngestionRunList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngestionRun'
+    PaginatedLineageEdgeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineageEdge'
+    PaginatedMetricList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Metric'
+    PaginatedOntologyVersionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OntologyVersion'
+    PaginatedPackInstallList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackInstall'
+    PaginatedPackList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pack'
+    PaginatedPipelineList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pipeline'
+    PaginatedPipelineRunList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineRun'
+    PaginatedRelationTypeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelationType'
+    PaginatedRetrievalProfileList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RetrievalProfile'
+    PaginatedStepRunList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/StepRun'
+    PaginatedTaxonomyList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Taxonomy'
+    PatchedAgentDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        system_prompt:
+          type: string
+        tools: {}
+        mcp_sources: {}
+        model:
+          type: string
+          maxLength: 120
+        enabled:
+          type: boolean
+        workspace:
+          type: string
+          format: uuid
+        ontology_version:
+          type: string
+          format: uuid
+          nullable: true
+        retrieval_profile:
+          type: string
+          format: uuid
+          nullable: true
+    PatchedDataSource:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        connector_key:
+          type: string
+          maxLength: 80
+        config: {}
+        secret_ref:
+          type: string
+          maxLength: 200
+        status:
+          $ref: '#/components/schemas/DataSourceStatusEnum'
+        schedule:
+          type: string
+          maxLength: 80
+        workspace:
+          type: string
+          format: uuid
+    PatchedDataset:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        uri:
+          type: string
+          maxLength: 1024
+        metadata: {}
+        workspace:
+          type: string
+          format: uuid
+        source:
+          type: string
+          format: uuid
+    PatchedEntityType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        version:
+          type: string
+          format: uuid
+        workspace:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 128
+        parent:
+          type: string
+          format: uuid
+          nullable: true
+        properties: {}
+        constraints: {}
+        description:
+          type: string
+    PatchedEvalDataset:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        items: {}
+        workspace:
+          type: string
+          format: uuid
+    PatchedEvalRun:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Metric'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        target_kind:
+          type: string
+          maxLength: 32
+        target_id:
+          type: string
+          maxLength: 64
+        started_at:
+          type: string
+          format: date-time
+          readOnly: true
+        finished_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        summary:
+          readOnly: true
+        workspace:
+          type: string
+          format: uuid
+        dataset:
+          type: string
+          format: uuid
+    PatchedOntologyVersion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        workspace:
+          type: string
+          format: uuid
+        semver:
+          type: string
+          maxLength: 32
+        status:
+          allOf:
+          - $ref: '#/components/schemas/OntologyVersionStatusEnum'
+          readOnly: true
+        parent:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        notes:
+          type: string
+        published_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedPack:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        semver:
+          type: string
+          maxLength: 32
+        publisher:
+          type: string
+          maxLength: 120
+        description:
+          type: string
+        manifest: {}
+        signature:
+          type: string
+          readOnly: true
+        signature_ok:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedPipeline:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        dag: {}
+        enabled:
+          type: boolean
+        workspace:
+          type: string
+          format: uuid
+    PatchedRelationType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        version:
+          type: string
+          format: uuid
+        workspace:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 128
+        source_type:
+          type: string
+          format: uuid
+        target_type:
+          type: string
+          format: uuid
+        cardinality:
+          $ref: '#/components/schemas/CardinalityEnum'
+        properties: {}
+        description:
+          type: string
+    PatchedRetrievalProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        modes: {}
+        policies: {}
+        rerank: {}
+        top_k:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        freshness:
+          $ref: '#/components/schemas/FreshnessEnum'
+        workspace:
+          type: string
+          format: uuid
+    PatchedTaxonomy:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        version:
+          type: string
+          format: uuid
+        workspace:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 128
+        terms: {}
+    Pipeline:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        dag: {}
+        enabled:
+          type: boolean
+        workspace:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - id
+      - name
+      - updated_at
+      - workspace
+    PipelineRun:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/Status6d9Enum'
+        triggered_by:
+          type: string
+          maxLength: 64
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        finished_at:
+          type: string
+          format: date-time
+          nullable: true
+        input: {}
+        summary: {}
+        workspace:
+          type: string
+          format: uuid
+        pipeline:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - id
+      - pipeline
+      - updated_at
+      - workspace
+    RelationType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        version:
+          type: string
+          format: uuid
+        workspace:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 128
+        source_type:
+          type: string
+          format: uuid
+        target_type:
+          type: string
+          format: uuid
+        cardinality:
+          $ref: '#/components/schemas/CardinalityEnum'
+        properties: {}
+        description:
+          type: string
+      required:
+      - id
+      - name
+      - source_type
+      - target_type
+      - version
+      - workspace
+    RetrievalProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+        modes: {}
+        policies: {}
+        rerank: {}
+        top_k:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        freshness:
+          $ref: '#/components/schemas/FreshnessEnum'
+        workspace:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - id
+      - name
+      - updated_at
+      - workspace
+    Status6d9Enum:
+      enum:
+      - pending
+      - running
+      - succeeded
+      - failed
+      - cancelled
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `running` - Running
+        * `succeeded` - Succeeded
+        * `failed` - Failed
+        * `cancelled` - Cancelled
+    StepRun:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        step_id:
+          type: string
+          maxLength: 80
+        processor_key:
+          type: string
+          maxLength: 80
+        status:
+          type: string
+          maxLength: 16
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        finished_at:
+          type: string
+          format: date-time
+          nullable: true
+        output: {}
+        error:
+          type: string
+        workspace:
+          type: string
+          format: uuid
+        run:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - id
+      - processor_key
+      - run
+      - step_id
+      - updated_at
+      - workspace
+    Taxonomy:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        version:
+          type: string
+          format: uuid
+        workspace:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 128
+        terms: {}
+      required:
+      - id
+      - name
+      - version
+      - workspace
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
