@@ -1,1 +1,424 @@
 
+{
+  "$defs": {
+    "OrbDependency": {
+      "additionalProperties": false,
+      "description": "Another ORB this bundle depends on.",
+      "properties": {
+        "slug": {
+          "title": "Slug",
+          "type": "string"
+        },
+        "version": {
+          "description": "Semver range or exact version.",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "slug",
+        "version"
+      ],
+      "title": "OrbDependency",
+      "type": "object"
+    },
+    "OrbDeployment": {
+      "additionalProperties": false,
+      "description": "Which targets the bundle declares support for.",
+      "properties": {
+        "helm": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OrbDeploymentTarget"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "compose": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OrbDeploymentTarget"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "appliku": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OrbDeploymentTarget"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "OrbDeployment",
+      "type": "object"
+    },
+    "OrbDeploymentTarget": {
+      "additionalProperties": false,
+      "description": "Per-target deployment hints. Rendered by B.3.",
+      "properties": {
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "values": {
+          "additionalProperties": true,
+          "description": "Free-form values forwarded to the renderer (Helm values, compose overrides, Appliku env, ...).",
+          "title": "Values",
+          "type": "object"
+        }
+      },
+      "title": "OrbDeploymentTarget",
+      "type": "object"
+    },
+    "OrbEvalRef": {
+      "additionalProperties": false,
+      "description": "An eval dataset shipped with the bundle, surfaced in `apps.evals`.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "file": {
+          "title": "File",
+          "type": "string"
+        },
+        "kind": {
+          "default": "qa",
+          "enum": [
+            "qa",
+            "retrieval",
+            "classification",
+            "shacl",
+            "custom"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "file"
+      ],
+      "title": "OrbEvalRef",
+      "type": "object"
+    },
+    "OrbFixture": {
+      "additionalProperties": false,
+      "description": "A seed file applied at install time (CSV / JSON / JSON-LD / Turtle).",
+      "properties": {
+        "name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "file": {
+          "description": "Path inside the bundle, relative to its root.",
+          "title": "File",
+          "type": "string"
+        },
+        "kind": {
+          "default": "raw",
+          "enum": [
+            "entities",
+            "relations",
+            "triples",
+            "documents",
+            "raw"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "format": {
+          "anyOf": [
+            {
+              "enum": [
+                "csv",
+                "json",
+                "jsonld",
+                "turtle",
+                "ntriples",
+                "yaml"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional target ontology slug. Defaults to the primary ontology.",
+          "title": "Target"
+        }
+      },
+      "required": [
+        "name",
+        "file"
+      ],
+      "title": "OrbFixture",
+      "type": "object"
+    },
+    "OrbMetadata": {
+      "additionalProperties": false,
+      "description": "Identity + provenance for the bundle.",
+      "properties": {
+        "name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "slug": {
+          "description": "DNS-safe identifier, lowercase.",
+          "title": "Slug",
+          "type": "string"
+        },
+        "version": {
+          "description": "Bundle semver (independent of ontology semver).",
+          "title": "Version",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "publisher": {
+          "default": "",
+          "title": "Publisher",
+          "type": "string"
+        },
+        "homepage": {
+          "default": "",
+          "title": "Homepage",
+          "type": "string"
+        },
+        "license": {
+          "default": "",
+          "title": "License",
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "slug",
+        "version"
+      ],
+      "title": "OrbMetadata",
+      "type": "object"
+    },
+    "OrbOntologyRef": {
+      "additionalProperties": false,
+      "description": "Reference to an ontology version this bundle pins.\n\nThe descriptor only carries the (slug, semver) pair; the actual\nOntologyVersion document is packaged separately (as JSON-LD/Turtle\nfiles under ``ontologies/``) by the B.4 packager.",
+      "properties": {
+        "slug": {
+          "title": "Slug",
+          "type": "string"
+        },
+        "semver": {
+          "title": "Semver",
+          "type": "string"
+        },
+        "file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional path inside the bundle, e.g. 'ontologies/clinical-1.0.0.ttl'.",
+          "title": "File"
+        },
+        "primary": {
+          "default": false,
+          "description": "At most one ontology may be marked primary.",
+          "title": "Primary",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "slug",
+        "semver"
+      ],
+      "title": "OrbOntologyRef",
+      "type": "object"
+    },
+    "OrbSemanticConfig": {
+      "additionalProperties": false,
+      "description": "Tenant-level toggles applied when the bundle is installed.",
+      "properties": {
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "publish_to_store": {
+          "default": false,
+          "title": "Publish To Store",
+          "type": "boolean"
+        },
+        "store_dataset": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Store Dataset"
+        },
+        "base_iri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the per-tenant base IRI. Defaults to ckOS scheme.",
+          "title": "Base Iri"
+        }
+      },
+      "title": "OrbSemanticConfig",
+      "type": "object"
+    },
+    "OrbShapeRef": {
+      "additionalProperties": false,
+      "description": "A SHACL shape set bundled for ingest-time validation.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "file": {
+          "title": "File",
+          "type": "string"
+        },
+        "enforcement": {
+          "default": "warn",
+          "enum": [
+            "warn",
+            "quarantine",
+            "block"
+          ],
+          "title": "Enforcement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "file"
+      ],
+      "title": "OrbShapeRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Canonical, validated representation of an ``orb.yaml`` file.",
+  "properties": {
+    "apiVersion": {
+      "const": "orb.ckos.io/v1",
+      "default": "orb.ckos.io/v1",
+      "title": "Apiversion",
+      "type": "string"
+    },
+    "kind": {
+      "const": "OntologyRuntimeBundle",
+      "default": "OntologyRuntimeBundle",
+      "title": "Kind",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/OrbMetadata"
+    },
+    "ontologies": {
+      "items": {
+        "$ref": "#/$defs/OrbOntologyRef"
+      },
+      "title": "Ontologies",
+      "type": "array"
+    },
+    "fixtures": {
+      "items": {
+        "$ref": "#/$defs/OrbFixture"
+      },
+      "title": "Fixtures",
+      "type": "array"
+    },
+    "shapes": {
+      "items": {
+        "$ref": "#/$defs/OrbShapeRef"
+      },
+      "title": "Shapes",
+      "type": "array"
+    },
+    "evals": {
+      "items": {
+        "$ref": "#/$defs/OrbEvalRef"
+      },
+      "title": "Evals",
+      "type": "array"
+    },
+    "semantic": {
+      "$ref": "#/$defs/OrbSemanticConfig"
+    },
+    "deployment": {
+      "$ref": "#/$defs/OrbDeployment"
+    },
+    "dependencies": {
+      "items": {
+        "$ref": "#/$defs/OrbDependency"
+      },
+      "title": "Dependencies",
+      "type": "array"
+    }
+  },
+  "required": [
+    "metadata"
+  ],
+  "title": "OrbDescriptor",
+  "type": "object"
+}
